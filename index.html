@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#07131e">
+    <title>SmartHull AI Fiber Monitoring</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="index.js" defer></script>
+</head>
+<body>
+    <main class="welcome-screen" id="welcome-screen">
+        <div class="welcome-orbit orbit-one" aria-hidden="true"></div>
+        <div class="welcome-orbit orbit-two" aria-hidden="true"></div>
+        <div class="welcome-content">
+            <a class="brand welcome-brand" href="#" aria-label="SmartHull AI Fiber Monitoring">
+                <span class="brand-mark" aria-hidden="true">S</span>
+                <span>SmartHull <span class="brand-light">AI Fiber Monitoring</span></span>
+            </a>
+            <p class="welcome-eyebrow"><span class="live-dot"></span> STRUCTURAL MONITORING SYSTEM</p>
+            <h1>See the strain.<br><span>Understand the risk.</span></h1>
+            <p class="welcome-copy">Explore how cargo load affects a vessel hull. Watch the structure respond and inspect fiber-optic crack signals as they appear.</p>
+            <button class="start-button" id="start-simulation" type="button">
+                <span>Start simulation</span><span class="start-arrow" aria-hidden="true">→</span>
+            </button>
+            <div class="welcome-meta"><span>LIVE HULL MODEL</span><span class="meta-dot"></span><span>FIBER-OPTIC INSPECTION</span></div>
+        </div>
+        <div class="welcome-visual" aria-hidden="true">
+            <span class="visual-label visual-label-top">STRUCTURAL HEALTH <b>01 / 04</b></span>
+            <svg viewBox="0 0 640 270">
+                <defs>
+                    <linearGradient id="welcome-hull" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#83e1d4"/>
+                        <stop offset="100%" stop-color="#287e82"/>
+                    </linearGradient>
+                    <filter id="welcome-glow">
+                        <feGaussianBlur stdDeviation="9"/>
+                    </filter>
+                </defs>
+                <path class="welcome-water" d="M20 196 Q100 188 180 196 T340 196 T500 196 T620 196 V260 H20Z"/>
+                <path class="welcome-waterline" d="M20 196 Q100 188 180 196 T340 196 T500 196 T620 196"/>
+                <path class="welcome-hull-shadow" d="M100 112H540Q505 175 430 194Q320 228 210 194Q135 175 100 112Z" filter="url(#welcome-glow)"/>
+                <path class="welcome-hull" d="M100 112H540Q505 175 430 194Q320 228 210 194Q135 175 100 112Z"/>
+                <path class="welcome-deck" d="M100 112H540"/>
+                <path class="welcome-fiber-glow" d="M150 142Q320 207 490 142" filter="url(#welcome-glow)"/>
+                <path class="welcome-fiber" d="M150 142Q320 207 490 142"/>
+                <circle class="welcome-sensor" cx="150" cy="142" r="5"/>
+                <circle class="welcome-sensor" cx="490" cy="142" r="5"/>
+                <path class="welcome-box" d="M265 79h43v33h-43zM265 88h43M286 79v33M315 68h40v44h-40zM315 80h40M335 68v44"/>
+                <path class="welcome-scan" d="M91 225H548"/>
+                <circle class="scan-point" cx="320" cy="225" r="4"/>
+            </svg>
+            <span class="visual-label visual-label-bottom">FIBER SENSOR <b>ONLINE</b></span>
+        </div>
+        <p class="welcome-disclaimer">DEMO SIMULATION · NOT FOR REAL-WORLD ENGINEERING DECISIONS</p>
+    </main>
+
+    <main class="simulator" id="simulator" hidden>
+        <header class="topbar">
+            <a class="brand" href="#" aria-label="SmartHull AI Fiber Monitoring">
+                <span class="brand-mark" aria-hidden="true">S</span>
+                <span>SmartHull <span class="brand-light">AI Fiber Monitoring</span></span>
+            </a>
+            <div class="simulation-tag"><span class="live-dot"></span> LOAD SIMULATION <span class="tag-divider">/</span> 01</div>
+        </header>
+
+        <section class="scene" aria-label="Boat hull load simulation">
+            <div class="scene-heading">
+                <p class="eyebrow">STRUCTURAL LAB <span>—</span> VESSEL 01</p>
+                <h1>How much can she take?</h1>
+                <p class="scene-subtitle">Adjust the load and watch the hull respond.</p>
+            </div>
+
+            <section class="load-panel panel" aria-labelledby="load-heading">
+                <div class="panel-kicker"><span class="panel-number">01</span> APPLIED LOAD</div>
+                <h2 id="load-heading">Cargo weight</h2>
+                <div class="weight-entry">
+                    <input id="weight-input" type="number" min="0" max="120" step="1" value="0" inputmode="decimal" aria-label="Cargo weight in tons" aria-describedby="load-note">
+                    <span>TONS</span>
+                </div>
+                <input id="weight-slider" class="weight-slider" type="range" min="0" max="120" step="1" value="0" aria-label="Adjust cargo weight in tons">
+                <div class="slider-ends"><span>0 T</span><span>120 T</span></div>
+                <p id="load-note" class="panel-note">Demo failure load: <strong>100 tons</strong></p>
+            </section>
+
+            <div class="hull-label"><span class="label-line"></span> LOAD-BEARING HULL <span class="label-line"></span></div>
+            <div class="hull-wrap" id="hull-wrap">
+                <svg class="hull-svg" viewBox="0 0 1000 460" role="group" aria-labelledby="hull-title hull-description">
+                    <title id="hull-title">Side view of a boat hull under load</title>
+                    <desc id="hull-description">The hull bends more as cargo weight increases. At the demo failure load, it cracks.</desc>
+                    <defs>
+                        <linearGradient id="hull-fill" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#83e1d4"/>
+                            <stop offset="100%" stop-color="#287e82"/>
+                        </linearGradient>
+                        <linearGradient id="hull-shade" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#d2fff2" stop-opacity=".22"/>
+                            <stop offset="100%" stop-color="#051922" stop-opacity=".16"/>
+                        </linearGradient>
+                        <linearGradient id="water-fill" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#0c5f72" stop-opacity=".32"/>
+                            <stop offset="100%" stop-color="#062331" stop-opacity=".04"/>
+                        </linearGradient>
+                        <filter id="hull-shadow" x="-20%" y="-30%" width="140%" height="180%">
+                            <feGaussianBlur stdDeviation="12"/>
+                        </filter>
+                    </defs>
+
+                    <ellipse class="hull-shadow" cx="500" cy="366" rx="368" ry="27" filter="url(#hull-shadow)"/>
+                    <path class="water" d="M68 365 Q180 353 292 365 T516 365 T740 365 T964 365 L964 460 L68 460 Z" fill="url(#water-fill)"/>
+                    <path class="waterline" d="M68 365 Q180 353 292 365 T516 365 T740 365 T964 365"/>
+                    <path class="water-ripple ripple-one" d="M140 390 Q180 384 220 390 M780 390 Q820 384 860 390"/>
+                    <path class="water-ripple ripple-two" d="M210 410 Q250 404 290 410 M700 410 Q740 404 780 410"/>
+
+                    <g class="hull-piece hull-left" id="hull-left">
+                        <path id="left-hull-shape" class="hull-piece-fill" d="M130 220 L500 220 L500 330 Q360 372 225 305 Q165 276 130 220Z"/>
+                    </g>
+                    <g class="hull-piece hull-right" id="hull-right">
+                        <path id="right-hull-shape" class="hull-piece-fill" d="M500 220 L870 220 Q835 276 775 305 Q640 372 500 330Z"/>
+                    </g>
+                    <path id="hull-outline" class="hull-outline" d="M130 220 L870 220 Q835 276 775 305 Q640 372 500 330 Q360 372 225 305 Q165 276 130 220Z"/>
+                    <path id="hull-deck" class="hull-deck" d="M130 220 L870 220"/>
+                    <path class="deck-detail" d="M238 207 L762 207"/>
+                    <path class="deck-detail deck-detail-short" d="M420 192 L580 192"/>
+                    <g id="cargo-load" aria-label="Cargo boxes and crew appear as load increases">
+                        <g class="cargo-box crate-amber" id="cargo-box-1"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-teal" id="cargo-box-2"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-blue" id="cargo-box-3"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-coral" id="cargo-box-4"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-olive" id="cargo-box-5"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-amber" id="cargo-box-6"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-blue" id="cargo-box-7"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-teal" id="cargo-box-8"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-coral" id="cargo-box-9"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="cargo-box crate-olive" id="cargo-box-10"><rect width="34" height="25" rx="2"/><path d="M0 7H34 M17 0V25"/></g>
+                        <g class="crew-member crew-blue" id="crew-1">
+                            <circle cx="9" cy="5" r="4"/>
+                            <path d="M4 12Q9 9 14 12L16 24H2Z M5 14L1 22 M13 14L17 22 M5 24L3 34 M13 24L15 34"/>
+                            <path class="crew-vest" d="M6 12L9 17L12 12"/>
+                        </g>
+                        <g class="crew-member crew-gold" id="crew-2">
+                            <circle cx="9" cy="5" r="4"/>
+                            <path d="M4 12Q9 9 14 12L16 24H2Z M5 14L1 22 M13 14L17 22 M5 24L3 34 M13 24L15 34"/>
+                            <path class="crew-vest" d="M6 12L9 17L12 12"/>
+                        </g>
+                        <g class="crew-member crew-coral" id="crew-3">
+                            <circle cx="9" cy="5" r="4"/>
+                            <path d="M4 12Q9 9 14 12L16 24H2Z M5 14L1 22 M13 14L17 22 M5 24L3 34 M13 24L15 34"/>
+                            <path class="crew-vest" d="M6 12L9 17L12 12"/>
+                        </g>
+                    </g>
+                    <path class="hull-highlight" d="M174 250 Q270 310 414 318"/>
+                    <path class="hull-highlight" d="M826 250 Q730 310 586 318"/>
+                    <path class="keel-detail" d="M470 347 Q500 356 530 347"/>
+
+                    <g class="fiber-sensor" aria-label="Fiber-optic crack sensor running through the hull">
+                        <path id="fiber-left-glow" class="fiber-glow"/>
+                        <path id="fiber-right-glow" class="fiber-glow"/>
+                        <path id="fiber-left" class="fiber-cable"/>
+                        <path id="fiber-right" class="fiber-cable"/>
+                        <circle class="fiber-end" cx="190" cy="260" r="4"/>
+                        <circle class="fiber-end" cx="810" cy="260" r="4"/>
+                    </g>
+
+                    <g id="micro-cracks" aria-label="Small cracks detected at multiple locations" aria-hidden="true">
+                        <g class="micro-crack" id="micro-crack-1" role="button" tabindex="0" aria-label="Microcrack 1. Click for details."><path class="micro-crack-hit-area"/><path class="micro-crack-glow"/><path class="micro-crack-line"/></g>
+                        <g class="micro-crack" id="micro-crack-2" role="button" tabindex="0" aria-label="Microcrack 2. Click for details."><path class="micro-crack-hit-area"/><path class="micro-crack-glow"/><path class="micro-crack-line"/></g>
+                        <g class="micro-crack" id="micro-crack-3" role="button" tabindex="0" aria-label="Microcrack 3. Click for details."><path class="micro-crack-hit-area"/><path class="micro-crack-glow"/><path class="micro-crack-line"/></g>
+                        <g class="micro-crack" id="micro-crack-4" role="button" tabindex="0" aria-label="Microcrack 4. Click for details."><path class="micro-crack-hit-area"/><path class="micro-crack-glow"/><path class="micro-crack-line"/></g>
+                    </g>
+
+                    <g class="load-arrows" aria-hidden="true">
+                        <path d="M430 88 L430 147 M500 70 L500 147 M570 88 L570 147"/>
+                        <path d="M418 135 L430 147 L442 135 M488 135 L500 147 L512 135 M558 135 L570 147 L582 135"/>
+                    </g>
+                    <text class="svg-caption" x="500" y="55" text-anchor="middle">CARGO LOAD</text>
+                    <g class="fiber-annotation" aria-label="Arrow identifying the red fiber-optic cable">
+                        <path id="fiber-arrow-line" d="M780 386 L700 300" marker-end="url(#fiber-arrow)"/>
+                        <text x="786" y="405">FIBER OPTIC</text>
+                    </g>
+                    <defs>
+                        <marker id="fiber-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M0 0 L10 5 L0 10 Z"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            <div class="scene-scale" aria-hidden="true">
+                <span>STERN</span><span class="scale-rule"></span><span>BOW</span>
+            </div>
+
+            <aside class="risk-panel panel" id="risk-panel" data-level="safe" aria-live="polite">
+                <div class="risk-top">
+                    <div>
+                        <div class="panel-kicker"><span class="panel-number">02</span> STRUCTURAL RISK</div>
+                        <h2 id="risk-status">Safe</h2>
+                    </div>
+                    <span class="risk-icon" id="risk-icon" aria-hidden="true">✓</span>
+                </div>
+                <div class="risk-reading"><span id="risk-value">0</span><span class="risk-percent">%</span></div>
+                <div class="risk-track" role="progressbar" aria-label="Structural risk" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="risk-progress">
+                    <span id="risk-bar"></span>
+                </div>
+                <p class="risk-description" id="risk-description">Hull within safe operating range.</p>
+            </aside>
+
+            <div class="failure-banner" id="failure-banner" role="status" aria-live="assertive">
+                <span class="failure-mark">!</span>
+                <span><strong>HULL FAILURE</strong><small>DEMO LOAD LIMIT EXCEEDED</small></span>
+            </div>
+
+            <p class="disclaimer">Interactive demo only. Not for real-world vessel safety or engineering decisions.</p>
+        </section>
+
+        <aside class="crack-detail panel" id="crack-detail" hidden aria-labelledby="crack-detail-title" aria-live="polite">
+            <div class="detail-header" id="detail-drag-handle">
+                <p class="detail-eyebrow">FIBER-OPTIC INSPECTION</p>
+                <span class="drag-indicator" aria-hidden="true">⠿ DRAG</span>
+                <button class="detail-close" id="detail-close" type="button" aria-label="Close crack details">×</button>
+            </div>
+            <h2 id="crack-detail-title">Microcrack detected</h2>
+            <p id="crack-detail-copy" class="detail-copy"></p>
+            <div class="detail-meta"><span>LOAD</span><strong id="detail-load"></strong></div>
+            <div class="detail-meta"><span>RISK</span><strong id="detail-risk"></strong></div>
+            <div class="detail-zoom">
+                <span>MAGNIFICATION</span>
+                <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+                <output id="zoom-level">2×</output>
+                <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+            </div>
+            <p class="detail-hint">Click another crack to inspect it.</p>
+        </aside>
+
+    </main>
+    <div class="launch-wipe" id="launch-wipe" aria-hidden="true"></div>
+</body>
+</html>
